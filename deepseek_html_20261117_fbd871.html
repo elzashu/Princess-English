@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#5b65d8">
+<title>Princess English — волшебный тренажёр</title>
+<style>
+:root{--bg:#fff5fb;--card:#fff;--ink:#56334f;--muted:#9b7893;--accent:#d85b9b;--accent2:#ed9bc5;--good:#328765;--bad:#c34d78;--line:#f2d8e8;--shadow:0 14px 36px rgba(166,82,135,.13)}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 12% 8%,#ffe2f1 0,transparent 28%),radial-gradient(circle at 90% 18%,#eee2ff 0,transparent 25%),linear-gradient(145deg,#fff3fa,#fffaff 55%,#f8f0ff);font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;color:var(--ink);min-height:100vh;padding:24px}
+button,input,select{font:inherit}button{cursor:pointer}
+.app{max-width:920px;margin:0 auto;position:relative}.app:before{content:"✦  ✧  ♡";position:absolute;right:8px;top:76px;color:#e7a4ca;font-size:18px;letter-spacing:12px;pointer-events:none;opacity:.8}.top{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:20px}
+.brand{display:flex;align-items:center;gap:12px}.logo{width:52px;height:52px;border-radius:18px;background:linear-gradient(145deg,#f28abd,#bd83df);color:#fff;display:grid;place-items:center;font-size:27px;font-weight:800;box-shadow:0 8px 18px #d85b9b44;border:2px solid #fff}
+h1{font-size:clamp(22px,4vw,30px);margin:0}.subtitle{color:var(--muted);font-size:13px;margin-top:3px}
+.tabs{display:flex;gap:8px;flex-wrap:wrap}.tab,.secondary,.primary,.danger{border:0;border-radius:12px;padding:11px 15px;font-weight:650}.tab{background:#fff;color:var(--muted);border:1px solid var(--line)}.tab.active{background:linear-gradient(135deg,#df6da9,#b98ade);color:#fff;border-color:transparent;box-shadow:0 5px 13px #d85b9b33}
+.panel{background:rgba(255,255,255,.94);border:1px solid #f5dceb;border-radius:24px;padding:clamp(18px,4vw,30px);box-shadow:var(--shadow)}
+.toolbar{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:18px}
+select,input{border:1px solid var(--line);border-radius:11px;padding:11px 12px;background:#fff;color:var(--ink);min-width:0}
+select:focus,input:focus{outline:3px solid #5965d822;border-color:var(--accent)}
+.category-select{min-width:210px}.progress{font-size:13px;color:var(--muted)}
+.word-card{text-align:center;padding:18px 8px 8px}.eyebrow{font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:750}
+.prompt{font-size:clamp(34px,7vw,54px);font-weight:800;margin:12px 0 5px;letter-spacing:-.04em}.instruction{color:var(--muted);font-size:14px}
+.answer{display:flex;justify-content:center;gap:7px;flex-wrap:wrap;min-height:56px;margin:25px auto 18px}
+.slot{width:43px;height:49px;border:2px dashed #e8b9d5;border-radius:13px;display:grid;place-items:center;font-size:23px;font-weight:750;background:#fff8fc;color:var(--accent)}
+.slot.filled{border-style:solid;border-color:#e58abb;background:#fff0f8}.slot:focus-visible,.letter:focus-visible{outline:3px solid #5965d855}
+.letters{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin:16px auto 24px;max-width:570px}
+.letter{width:46px;height:48px;border:1px solid #f0cfe2;border-bottom:3px solid #e8b2d1;border-radius:14px;background:linear-gradient(180deg,#fff,#fff6fb);color:#754866;font-size:21px;font-weight:800;transition:.12s;box-shadow:0 3px 7px #d98bb51a}
+.letter:hover:not(:disabled){transform:translateY(-3px);border-color:var(--accent);color:var(--accent);box-shadow:0 6px 12px #d85b9b25}.letter:disabled{opacity:.25;cursor:default}
+.actions{display:flex;justify-content:center;gap:9px;flex-wrap:wrap}.primary{background:linear-gradient(135deg,#e66eaa,#c17fd5);color:#fff;padding:12px 20px;box-shadow:0 6px 14px #d85b9b30}.primary:hover{background:linear-gradient(135deg,#d95d9d,#ad6cc7)}.secondary{background:#fff0f8;color:#92577c;border:1px solid #f5d8e9}.danger{background:#fff0f1;color:var(--bad)}
+.feedback{min-height:28px;text-align:center;font-weight:700;margin:14px 0 0}.feedback.good{color:var(--good)}.feedback.bad{color:var(--bad)}
+.stats{display:flex;justify-content:center;gap:22px;color:var(--muted);font-size:13px;margin-top:20px}.stats strong{color:var(--ink)}
+.manage{margin-top:16px}.manage-head{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}.manage h2{font-size:20px;margin:0}.form-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:16px 0 10px}.form-grid input,.form-grid select{width:100%}
+.add-category{display:flex;gap:8px;margin-top:10px}.add-category input{flex:1}.word-list{margin-top:18px;display:grid;gap:8px}.word-row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:11px 13px;border:1px solid var(--line);border-radius:14px;background:#fffafd}.word-row small{display:block;color:var(--muted);margin-top:2px}.row-actions{display:flex;gap:6px}.icon-btn{border:0;background:#f1f2fa;border-radius:9px;padding:7px 10px;color:#505779}.icon-btn.delete{background:#fff0f1;color:var(--bad)}
+.hidden{display:none!important}.empty{color:var(--muted);text-align:center;padding:24px}.note{font-size:12px;color:var(--muted);line-height:1.5;margin-top:14px}
+@media(max-width:650px){body{padding:14px}.top{align-items:flex-start;flex-direction:column}.form-grid{grid-template-columns:1fr}.slot{width:37px;height:44px}.letter{width:42px;height:45px}.panel{border-radius:17px}}
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="top">
+    <div class="brand"><div class="logo">♕</div><div><h1>Princess English ✨</h1><div class="subtitle">Волшебный мир английских слов</div></div></div>
+    <nav class="tabs"><button class="tab active" id="practiceTab">Тренировка</button><button class="tab" id="manageTab">Мои слова</button></nav>
+  </header>
+
+  <main id="practicePanel" class="panel">
+    <div class="toolbar">
+      <select id="categoryFilter" class="category-select" aria-label="Выбрать категорию"></select>
+      <div class="progress" id="progress">Слово 1</div>
+    </div>
+    <div class="word-card">
+      <div class="eyebrow">✨ Королевское задание ✨</div>
+      <div class="prompt" id="prompt">Глаза</div>
+      <div class="instruction">Собери английское слово по буквам, принцесса!</div>
+      <div class="answer" id="answer" aria-label="Твой ответ"></div>
+      <div class="letters" id="letters"></div>
+      <div class="actions">
+        <button class="secondary" id="undoBtn">← Убрать букву</button>
+        <button class="secondary" id="clearBtn">Очистить</button>
+        <button class="primary" id="checkBtn">Проверить</button>
+        <button class="secondary" id="nextBtn">Следующее →</button>
+      </div>
+      <div class="feedback" id="feedback" aria-live="polite"></div>
+      <div class="stats"><span>Верно: <strong id="correctCount">0</strong></span><span>Ошибки: <strong id="wrongCount">0</strong></span></div>
+    </div>
+    <p class="note">Подсказка: если букв не хватает, добавьте к слову несколько лишних букв в настройках игры позже — сейчас программа автоматически перемешивает буквы самого слова.</p>
+  </main>
+
+  <section id="managePanel" class="panel manage hidden">
+    <div class="manage-head"><div><h2>Мои слова</h2><div class="subtitle">Добавляйте, изменяйте и удаляйте слова</div></div><span class="progress" id="wordCount"></span></div>
+    <form id="wordForm">
+      <div class="form-grid">
+        <input id="ruInput" placeholder="Слово по-русски" required maxlength="50">
+        <input id="enInput" placeholder="English word" required maxlength="50">
+        <select id="categoryInput" required></select>
+      </div>
+      <div class="actions" style="justify-content:flex-start"><button class="primary" type="submit" id="saveWordBtn">Добавить слово</button><button class="secondary hidden" type="button" id="cancelEditBtn">Отмена</button></div>
+    </form>
+    <div class="add-category"><input id="newCategory" placeholder="Название новой категории"><button class="secondary" id="addCategoryBtn" type="button">+ Категория</button></div>
+    <div class="word-list" id="wordList"></div>
+    <p class="note">Слова и категории сохраняются в памяти браузера на этом устройстве. Если открыть ссылку на другом устройстве или в другом браузере, список нужно будет перенести отдельно. В следующей версии можно добавить экспорт и импорт списка.</p>
+  </section>
+</div>
+<script>
+const DEFAULT_WORDS = [
+  // Цвета
+  {id:1,ru:"синий",en:"blue",cat:"Цвета"},
+  {id:2,ru:"зелёный",en:"green",cat:"Цвета"},
+  {id:3,ru:"розовый",en:"pink",cat:"Цвета"},
+  {id:4,ru:"фиолетовый",en:"purple",cat:"Цвета"},
+  {id:5,ru:"красный",en:"red",cat:"Цвета"},
+  {id:6,ru:"оранжевый",en:"orange",cat:"Цвета"},
+  {id:7,ru:"жёлтый",en:"yellow",cat:"Цвета"},
+  {id:8,ru:"чёрный",en:"black",cat:"Цвета"},
+  {id:9,ru:"коричневый",en:"brown",cat:"Цвета"},
+  {id:10,ru:"серый",en:"grey",cat:"Цвета"},
+  {id:11,ru:"белый",en:"white",cat:"Цвета"},
+
+  // Школа
+  {id:12,ru:"книга",en:"book",cat:"Школа"},
+  {id:13,ru:"стул",en:"chair",cat:"Школа"},
+  {id:14,ru:"стирательная резинка",en:"eraser",cat:"Школа"},
+  {id:15,ru:"ручка",en:"pen",cat:"Школа"},
+  {id:16,ru:"карандаш",en:"pencil",cat:"Школа"},
+  {id:17,ru:"стол",en:"table",cat:"Школа"},
+  {id:18,ru:"рюкзак",en:"backpack",cat:"Школа"},
+
+  // Игрушки
+  {id:19,ru:"мяч",en:"ball",cat:"Игрушки"},
+  {id:20,ru:"велосипед",en:"bike",cat:"Игрушки"},
+  {id:21,ru:"машина",en:"car",cat:"Игрушки"},
+  {id:22,ru:"компьютер",en:"computer",cat:"Игрушки"},
+  {id:23,ru:"кукла",en:"doll",cat:"Игрушки"},
+  {id:24,ru:"барабан",en:"drum",cat:"Игрушки"},
+  {id:25,ru:"поезд",en:"train",cat:"Игрушки"},
+
+  // Семья
+  {id:26,ru:"брат",en:"brother",cat:"Семья"},
+  {id:27,ru:"сестра",en:"sister",cat:"Семья"},
+  {id:28,ru:"мама",en:"mother",cat:"Семья"},
+  {id:29,ru:"папа",en:"father",cat:"Семья"},
+  {id:30,ru:"бабушка",en:"grandmother",cat:"Семья"},
+  {id:31,ru:"дедушка",en:"grandfather",cat:"Семья"},
+
+  // Прилагательные
+  {id:32,ru:"прекрасный",en:"beautiful",cat:"Прилагательные"},
+  {id:33,ru:"счастливый",en:"happy",cat:"Прилагательные"},
+  {id:34,ru:"грустный",en:"sad",cat:"Прилагательные"},
+  {id:35,ru:"старый",en:"old",cat:"Прилагательные"},
+  {id:36,ru:"молодой",en:"young",cat:"Прилагательные"},
+  {id:37,ru:"уродливый",en:"ugly",cat:"Прилагательные"},
+  {id:38,ru:"большой",en:"big",cat:"Прилагательные"},
+  {id:39,ru:"маленький",en:"small",cat:"Прилагательные"},
+  {id:40,ru:"чистый",en:"clean",cat:"Прилагательные"},
+  {id:41,ru:"грязный",en:"dirty",cat:"Прилагательные"},
+  {id:42,ru:"длинный",en:"long",cat:"Прилагательные"},
+  {id:43,ru:"короткий",en:"short",cat:"Прилагательные"},
+  {id:44,ru:"высокий",en:"tall",cat:"Прилагательные"},
+
+  // Животные домашние
+  {id:45,ru:"кот",en:"cat",cat:"Животные домашние"},
+  {id:46,ru:"птица",en:"bird",cat:"Животные домашние"},
+  {id:47,ru:"собака",en:"dog",cat:"Животные домашние"},
+  {id:48,ru:"рыба",en:"fish",cat:"Животные домашние"},
+  {id:49,ru:"лошадь",en:"horse",cat:"Животные домашние"},
+  {id:50,ru:"мышь",en:"mouse",cat:"Животные домашние"},
+
+  // Части тела
+  {id:51,ru:"уши",en:"ears",cat:"Части тела"},
+  {id:52,ru:"ухо",en:"ear",cat:"Части тела"},
+  {id:53,ru:"глаза",en:"eyes",cat:"Части тела"},
+  {id:54,ru:"глаз",en:"eye",cat:"Части тела"},
+  {id:55,ru:"лицо",en:"face",cat:"Части тела"},
+  {id:56,ru:"волосы",en:"hair",cat:"Части тела"},
+  {id:57,ru:"голова",en:"head",cat:"Части тела"},
+  {id:58,ru:"колени",en:"knees",cat:"Части тела"},
+  {id:59,ru:"рот",en:"mouth",cat:"Части тела"},
+  {id:60,ru:"нос",en:"nose",cat:"Части тела"},
+  {id:61,ru:"плечи",en:"shoulders",cat:"Части тела"},
+  {id:62,ru:"пальцы на ногах",en:"toes",cat:"Части тела"},
+  {id:63,ru:"зубы",en:"teeth",cat:"Части тела"},
+  {id:64,ru:"зуб",en:"tooth",cat:"Части тела"},
+  {id:65,ru:"рука",en:"arm",cat:"Части тела"},
+  {id:66,ru:"ступня",en:"foot",cat:"Части тела"},
+  {id:67,ru:"ступни",en:"feet",cat:"Части тела"},
+  {id:68,ru:"кисть",en:"hand",cat:"Части тела"},
+  {id:69,ru:"нога",en:"leg",cat:"Части тела"},
+  {id:70,ru:"хвост",en:"tail",cat:"Части тела"},
+
+  // Дикие животные
+  {id:71,ru:"медведь",en:"bear",cat:"Дикие животные"},
+  {id:72,ru:"крокодил",en:"crocodile",cat:"Дикие животные"},
+  {id:73,ru:"слон",en:"elephant",cat:"Дикие животные"},
+  {id:74,ru:"жираф",en:"giraffe",cat:"Дикие животные"},
+  {id:75,ru:"гиппопотам",en:"hippo",cat:"Дикие животные"},
+  {id:76,ru:"обезьяна",en:"monkey",cat:"Дикие животные"},
+  {id:77,ru:"змея",en:"snake",cat:"Дикие животные"},
+  {id:78,ru:"тигр",en:"tiger",cat:"Дикие животные"},
+
+  // Одежда
+  {id:79,ru:"кепка",en:"cap",cat:"Одежда"},
+  {id:80,ru:"куртка",en:"jacket",cat:"Одежда"},
+  {id:81,ru:"обувь",en:"shoes",cat:"Одежда"},
+  {id:82,ru:"шорты",en:"shorts",cat:"Одежда"},
+  {id:83,ru:"юбка",en:"skirt",cat:"Одежда"},
+  {id:84,ru:"носки",en:"socks",cat:"Одежда"},
+  {id:85,ru:"брюки",en:"trousers",cat:"Одежда"},
+  {id:86,ru:"футболка",en:"t-shirt",cat:"Одежда"},
+  {id:87,ru:"платье",en:"dress",cat:"Одежда"},
+
+  // Свалка
+  {id:88,ru:"он",en:"he",cat:"Свалка"},
+  {id:89,ru:"она",en:"she",cat:"Свалка"},
+  {id:90,ru:"они",en:"they",cat:"Свалка"},
+  {id:91,ru:"оно",en:"it",cat:"Свалка"}
+];
+const DEFAULT_CATEGORIES = [
+  "Цвета","Школа","Игрушки","Семья","Прилагательные",
+  "Животные домашние","Части тела","Дикие животные","Одежда","Свалка"
+];
+const $ = id => document.getElementById(id);
+let words = load("englishTrainerWords", DEFAULT_WORDS);
+let categories = load("englishTrainerCategories", DEFAULT_CATEGORIES);
+let current = null, tiles = [], chosen = [], correct = 0, wrong = 0, editingId = null, queue = [], queueIndex = 0;
+function load(key,fallback){try{const v=localStorage.getItem(key);return v?JSON.parse(v):fallback}catch(e){return fallback}}
+function save(){localStorage.setItem("englishTrainerWords",JSON.stringify(words));localStorage.setItem("englishTrainerCategories",JSON.stringify(categories))}
+function shuffle(a){const b=[...a];for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]]}return b}
+function selectedCategory(){return $("categoryFilter").value||"Все категории"}
+function filteredWords(){return selectedCategory()==="Все категории"?words:words.filter(w=>w.cat===selectedCategory())}
+function refreshSelects(){
+ const filter=$("categoryFilter"), old=filter.value;
+ filter.innerHTML="";
+ ["Все категории",...categories].forEach(c=>filter.add(new Option(c,c)));
+ filter.value=[...filter.options].some(o=>o.value===old)?old:"Все категории";
+ const cat=$("categoryInput"), oldCat=cat.value;cat.innerHTML="";
+ categories.forEach(c=>cat.add(new Option(c,c)));
+ if(categories.includes(oldCat))cat.value=oldCat;
+}
+function startRound(){
+ const list=filteredWords();
+ if(!list.length){$("prompt").textContent="Нет слов";$("answer").innerHTML="";$("letters").innerHTML="";$("feedback").textContent="Добавьте слова в разделе «Мои слова».";return}
+ queue=shuffle(list);queueIndex=0;showWord();
+}
+function showWord(){
+ const list=filteredWords();if(!list.length){startRound();return}
+ if(queueIndex>=queue.length){queue=shuffle(list);queueIndex=0}
+ current=queue[queueIndex];chosen=[];tiles=shuffle([...current.en.toLowerCase()]);
+ $("prompt").textContent=current.ru;$("progress").textContent=`Слово ${queueIndex+1} из ${queue.length}`;
+ $("feedback").textContent="";$("feedback").className="feedback";renderAnswer();renderLetters();
+}
+function renderAnswer(){
+ const answer=$("answer");answer.innerHTML="";
+ for(let i=0;i<current.en.length;i++){
+  const slot=document.createElement("button");slot.type="button";slot.className="slot"+(chosen[i]!==undefined?" filled":"");slot.textContent=chosen[i]!==undefined?tiles[chosen[i]]:"";
+  slot.setAttribute("aria-label",chosen[i]!==undefined?"Убрать букву":"Пустое место");slot.addEventListener("click",()=>{if(chosen[i]!==undefined){chosen.splice(i,1);renderAnswer();renderLetters()}});
+  answer.appendChild(slot);
+ }
+}
+function renderLetters(){
+ const area=$("letters");area.innerHTML="";
+ tiles.forEach((letter,i)=>{const b=document.createElement("button");b.type="button";b.className="letter";b.textContent=letter.toUpperCase();b.disabled=chosen.includes(i);b.addEventListener("click",()=>{if(chosen.length<current.en.length){chosen.push(i);renderAnswer();renderLetters();$("feedback").textContent=""}});area.appendChild(b)});
+}
+function clearAnswer(){chosen=[];renderAnswer();renderLetters();$("feedback").textContent="";$("feedback").className="feedback"}
+$("checkBtn").addEventListener("click",()=>{
+ if(!current)return;if(chosen.length!==current.en.length){$("feedback").textContent="Сначала используй все буквы."; $("feedback").className="feedback bad";return}
+ const answer=chosen.map(i=>tiles[i]).join("");
+ if(answer===current.en.toLowerCase()){$("feedback").textContent="Отлично! Правильно! 🎉";$("feedback").className="feedback good";correct++;$("correctCount").textContent=correct}
+ else{$("feedback").textContent="Пока неверно. Попробуй ещё раз!";$("feedback").className="feedback bad";wrong++;$("wrongCount").textContent=wrong}
+});
+$("nextBtn").addEventListener("click",()=>{queueIndex++;showWord()});
+$("undoBtn").addEventListener("click",()=>{chosen.pop();renderAnswer();renderLetters();$("feedback").textContent=""});
+$("clearBtn").addEventListener("click",clearAnswer);
+$("categoryFilter").addEventListener("change",startRound);
+$("practiceTab").addEventListener("click",()=>switchTab("practice"));
+$("manageTab").addEventListener("click",()=>switchTab("manage"));
+function switchTab(tab){const practice=tab==="practice";$("practicePanel").classList.toggle("hidden",!practice);$("managePanel").classList.toggle("hidden",practice);$("practiceTab").classList.toggle("active",practice);$("manageTab").classList.toggle("active",!practice);if(!practice)renderWordList()}
+function renderWordList(){
+ $("wordCount").textContent=`Всего слов: ${words.length}`;$("wordList").innerHTML="";
+ if(!words.length){$("wordList").innerHTML='<div class="empty">Пока нет слов. Добавьте первое слово выше.</div>';return}
+ words.forEach(w=>{
+  const row=document.createElement("div");row.className="word-row";
+  const info=document.createElement("div");info.innerHTML=`<strong></strong><small></small>`;info.querySelector("strong").textContent=`${w.ru} — ${w.en}`;info.querySelector("small").textContent=w.cat;
+  const actions=document.createElement("div");actions.className="row-actions";
+  const edit=document.createElement("button");edit.className="icon-btn";edit.textContent="Изменить";edit.addEventListener("click",()=>editWord(w.id));
+  const del=document.createElement("button");del.className="icon-btn delete";del.textContent="Удалить";del.addEventListener("click",()=>deleteWord(w.id));
+  actions.append(edit,del);row.append(info,actions);$("wordList").append(row);
+ });
+}
+$("wordForm").addEventListener("submit",e=>{
+ e.preventDefault();const ru=$("ruInput").value.trim(),en=$("enInput").value.trim().toLowerCase(),cat=$("categoryInput").value;
+ if(!ru||!en||!cat)return;if(!/^[a-z]+$/.test(en)){alert("Английское слово вводите только латинскими буквами без пробелов.");return}
+ if(editingId!==null){const w=words.find(x=>x.id===editingId);if(w)Object.assign(w,{ru,en,cat})}
+ else{words.push({id:Date.now(),ru,en,cat})}
+ save();resetForm();renderWordList();refreshSelects();startRound();
+});
+function editWord(id){const w=words.find(x=>x.id===id);if(!w)return;editingId=id;$("ruInput").value=w.ru;$("enInput").value=w.en;$("categoryInput").value=w.cat;$("saveWordBtn").textContent="Сохранить изменения";$("cancelEditBtn").classList.remove("hidden");$("ruInput").focus()}
+function deleteWord(id){const w=words.find(x=>x.id===id);if(!w)return;if(confirm(`Удалить слово «${w.ru} — ${w.en}»?`)){words=words.filter(x=>x.id!==id);save();renderWordList();startRound()}}
+function resetForm(){editingId=null;$("wordForm").reset();$("saveWordBtn").textContent="Добавить слово";$("cancelEditBtn").classList.add("hidden")}
+$("cancelEditBtn").addEventListener("click",resetForm);
+$("addCategoryBtn").addEventListener("click",()=>{const name=$("newCategory").value.trim();if(!name)return;if(categories.some(c=>c.toLowerCase()===name.toLowerCase())){alert("Такая категория уже есть.");return}categories.push(name);save();$("newCategory").value="";refreshSelects();$("categoryInput").value=name;renderWordList()});
+refreshSelects();renderWordList();startRound();
+</script>
+</body>
+</html>
