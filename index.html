@@ -2,9 +2,12 @@
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Английский">
 <meta name="theme-color" content="#5b65d8">
-<title>Princess English — волшебный тренажёр</title>
+<title>Английский для Оленьки</title>
 <style>
 :root{--bg:#fff5fb;--card:#fff;--ink:#56334f;--muted:#9b7893;--accent:#d85b9b;--accent2:#ed9bc5;--good:#328765;--bad:#c34d78;--line:#f2d8e8;--shadow:0 14px 36px rgba(166,82,135,.13)}
 *{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 12% 8%,#ffe2f1 0,transparent 28%),radial-gradient(circle at 90% 18%,#eee2ff 0,transparent 25%),linear-gradient(145deg,#fff3fa,#fffaff 55%,#f8f0ff);font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;color:var(--ink);min-height:100vh;padding:24px}
@@ -33,12 +36,39 @@ select:focus,input:focus{outline:3px solid #5965d822;border-color:var(--accent)}
 .add-category{display:flex;gap:8px;margin-top:10px}.add-category input{flex:1}.word-list{margin-top:18px;display:grid;gap:8px}.word-row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:11px 13px;border:1px solid var(--line);border-radius:14px;background:#fffafd}.word-row small{display:block;color:var(--muted);margin-top:2px}.row-actions{display:flex;gap:6px}.icon-btn{border:0;background:#f1f2fa;border-radius:9px;padding:7px 10px;color:#505779}.icon-btn.delete{background:#fff0f1;color:var(--bad)}
 .hidden{display:none!important}.empty{color:var(--muted);text-align:center;padding:24px}.note{font-size:12px;color:var(--muted);line-height:1.5;margin-top:14px}
 @media(max-width:650px){body{padding:14px}.top{align-items:flex-start;flex-direction:column}.form-grid{grid-template-columns:1fr}.slot{width:37px;height:44px}.letter{width:42px;height:45px}.panel{border-radius:17px}}
+
+/* ===== Телефон и планшет ===== */
+html{-webkit-text-size-adjust:100%}
+body{min-height:100vh;min-height:100dvh;padding:max(24px,env(safe-area-inset-top)) max(24px,env(safe-area-inset-right)) max(24px,env(safe-area-inset-bottom)) max(24px,env(safe-area-inset-left))}
+button{touch-action:manipulation;-webkit-tap-highlight-color:transparent;-webkit-user-select:none;user-select:none}
+input,select{font-size:16px}
+.tab,.secondary,.primary,.danger{min-height:46px}
+.slot{width:clamp(34px,9.5vw,58px);height:clamp(42px,11.5vw,66px);font-size:clamp(20px,5.5vw,32px)}
+.letter{width:clamp(44px,11.5vw,66px);height:clamp(48px,12.5vw,70px);font-size:clamp(22px,5.5vw,32px)}
+.letter:active:not(:disabled){transform:scale(.93)}
+.letters{gap:clamp(8px,2vw,12px)}
+.answer{gap:clamp(5px,1.5vw,9px)}
+.icon-btn{min-height:40px;padding:8px 12px}
+@media(hover:none){.letter:hover:not(:disabled){transform:none;box-shadow:0 3px 7px #d98bb51a;border-color:#f0cfe2;color:#754866}}
+@media(min-width:768px){.letters{max-width:720px}.prompt{font-size:clamp(44px,6vw,64px)}.panel{padding:36px}}
+@media(max-width:650px){
+ body{padding:max(14px,env(safe-area-inset-top)) max(14px,env(safe-area-inset-right)) max(14px,env(safe-area-inset-bottom)) max(14px,env(safe-area-inset-left))}
+ .app:before{display:none}
+ .tabs{width:100%}.tab{flex:1}
+ .toolbar{flex-direction:column;align-items:stretch;gap:8px}.category-select{width:100%;min-width:0}.progress{text-align:center}
+ #practicePanel .actions{display:grid;grid-template-columns:1fr 1fr;width:100%}
+ #practicePanel .actions .primary{grid-column:1/-1;order:-1;min-height:52px;font-size:18px}
+ .word-row{flex-wrap:wrap}.row-actions{width:100%}.row-actions .icon-btn{flex:1}
+ .add-category{flex-direction:column}
+ .stats{margin-top:16px}
+}
+@media(max-height:500px) and (orientation:landscape){.word-card{padding-top:4px}.answer{margin:12px auto 8px}.letters{margin:8px auto 12px}.prompt{margin:4px 0}}
 </style>
 </head>
 <body>
 <div class="app">
   <header class="top">
-    <div class="brand"><div class="logo">♕</div><div><h1>Princess English ✨</h1><div class="subtitle">Волшебный мир английских слов</div></div></div>
+    <div class="brand"><div class="logo">🐱</div><div><h1>Английский для Оленьки ✨</h1><div class="subtitle">Волшебный мир английских слов</div></div></div>
     <nav class="tabs"><button class="tab active" id="practiceTab">Тренировка</button><button class="tab" id="manageTab">Мои слова</button></nav>
   </header>
 
@@ -191,19 +221,48 @@ const DEFAULT_WORDS = [
   {id:88,ru:"он",en:"he",cat:"Свалка"},
   {id:89,ru:"она",en:"she",cat:"Свалка"},
   {id:90,ru:"они",en:"they",cat:"Свалка"},
-  {id:91,ru:"оно",en:"it",cat:"Свалка"}
+  {id:91,ru:"оно",en:"it",cat:"Свалка"},
+
+  // Числа
+  {id:92,ru:"один",en:"one",cat:"Числа"},
+  {id:93,ru:"два",en:"two",cat:"Числа"},
+  {id:94,ru:"три",en:"three",cat:"Числа"},
+  {id:95,ru:"четыре",en:"four",cat:"Числа"},
+  {id:96,ru:"пять",en:"five",cat:"Числа"},
+  {id:97,ru:"шесть",en:"six",cat:"Числа"},
+  {id:98,ru:"семь",en:"seven",cat:"Числа"},
+  {id:99,ru:"восемь",en:"eight",cat:"Числа"},
+  {id:100,ru:"девять",en:"nine",cat:"Числа"},
+  {id:101,ru:"десять",en:"ten",cat:"Числа"}
 ];
 const DEFAULT_CATEGORIES = [
   "Цвета","Школа","Игрушки","Семья","Прилагательные",
-  "Животные домашние","Части тела","Дикие животные","Одежда","Свалка"
+  "Животные домашние","Части тела","Дикие животные","Одежда","Числа","Свалка"
 ];
 const $ = id => document.getElementById(id);
 let words = load("englishTrainerWords", DEFAULT_WORDS);
 let categories = load("englishTrainerCategories", DEFAULT_CATEGORIES);
+// Добавляем категорию «Числа» тем, у кого список уже сохранён в браузере
+(function migrate(){
+ try{
+  if(localStorage.getItem("englishTrainerNumbersAdded"))return;
+  if(!categories.includes("Числа")){const i=categories.indexOf("Свалка");if(i>=0)categories.splice(i,0,"Числа");else categories.push("Числа")}
+  DEFAULT_WORDS.filter(w=>w.cat==="Числа").forEach(w=>{if(!words.some(x=>x.cat==="Числа"&&x.en===w.en))words.push({...w})});
+  save();localStorage.setItem("englishTrainerNumbersAdded","1");
+ }catch(e){}
+})();
 let current = null, tiles = [], chosen = [], correct = 0, wrong = 0, editingId = null, queue = [], queueIndex = 0;
 function load(key,fallback){try{const v=localStorage.getItem(key);return v?JSON.parse(v):fallback}catch(e){return fallback}}
 function save(){localStorage.setItem("englishTrainerWords",JSON.stringify(words));localStorage.setItem("englishTrainerCategories",JSON.stringify(categories))}
 function shuffle(a){const b=[...a];for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]]}return b}
+function shuffleLetters(word){
+ const letters=[...word];
+ // если все буквы одинаковые, перемешать иначе нельзя
+ if(new Set(letters).size<2)return letters;
+ let t;
+ do{t=shuffle(letters)}while(t.join("")===word);
+ return t;
+}
 function selectedCategory(){return $("categoryFilter").value||"Все категории"}
 function filteredWords(){return selectedCategory()==="Все категории"?words:words.filter(w=>w.cat===selectedCategory())}
 function refreshSelects(){
@@ -223,7 +282,7 @@ function startRound(){
 function showWord(){
  const list=filteredWords();if(!list.length){startRound();return}
  if(queueIndex>=queue.length){queue=shuffle(list);queueIndex=0}
- current=queue[queueIndex];chosen=[];tiles=shuffle([...current.en.toLowerCase()]);
+ current=queue[queueIndex];chosen=[];tiles=shuffleLetters(current.en.toLowerCase());
  $("prompt").textContent=current.ru;$("progress").textContent=`Слово ${queueIndex+1} из ${queue.length}`;
  $("feedback").textContent="";$("feedback").className="feedback";renderAnswer();renderLetters();
 }
@@ -237,7 +296,7 @@ function renderAnswer(){
 }
 function renderLetters(){
  const area=$("letters");area.innerHTML="";
- tiles.forEach((letter,i)=>{const b=document.createElement("button");b.type="button";b.className="letter";b.textContent=letter.toUpperCase();b.disabled=chosen.includes(i);b.addEventListener("click",()=>{if(chosen.length<current.en.length){chosen.push(i);renderAnswer();renderLetters();$("feedback").textContent=""}});area.appendChild(b)});
+ tiles.forEach((letter,i)=>{const b=document.createElement("button");b.type="button";b.className="letter";b.textContent=letter;b.disabled=chosen.includes(i);b.addEventListener("click",()=>{if(chosen.length<current.en.length){chosen.push(i);renderAnswer();renderLetters();$("feedback").textContent=""}});area.appendChild(b)});
 }
 function clearAnswer(){chosen=[];renderAnswer();renderLetters();$("feedback").textContent="";$("feedback").className="feedback"}
 $("checkBtn").addEventListener("click",()=>{
